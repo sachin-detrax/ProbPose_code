@@ -17,7 +17,7 @@ train_cfg = dict(max_epochs=210, val_interval=10)
 custom_imports = dict(imports=["mmpose.engine.optim_wrappers.layer_decay_optim_wrapper"], allow_failed_imports=False)
 
 optim_wrapper = dict(
-    optimizer=dict(type="AdamW", lr=TRAIN_BATCH_SIZE / 64 * 5e-5, betas=(0.9, 0.999), weight_decay=0.1),
+    optimizer=dict(type="AdamW", lr=TRAIN_BATCH_SIZE / 64 * 5e-4, betas=(0.9, 0.999), weight_decay=0.1),
     paramwise_cfg=dict(
         num_layers=12,
         layer_decay_rate=0.8,
@@ -99,6 +99,7 @@ train_pipeline = [
     dict(type="RandomFlip", direction="horizontal"),
     dict(type="RandomHalfBody"),
     dict(type="RandomBBoxTransform"),
+    dict(type="RandomEdgesBlackout", input_padding=INPUT_PADDING, input_size=(192, 256)),
     dict(type="TopdownAffine", input_size=codec["input_size"], use_udp=True, input_padding=INPUT_PADDING),
     dict(type="GenerateTarget", encoder=codec),
     dict(type="PackPoseInputs"),
