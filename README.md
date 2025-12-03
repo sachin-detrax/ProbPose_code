@@ -122,6 +122,43 @@ You can also run ProbPose directly in Google Colab without any local installatio
 
 For more detailed information on demos and visualization options, please refer to the [MMPose documentation](https://mmpose.readthedocs.io/en/latest/user_guides/inference.html).
 
+### 🎥 Video to 2D Keypoints CSV
+
+Extract 2D keypoints from videos and save them to CSV format with frame numbers and all body part names:
+
+```bash
+python video_to_2d_keypoints.py your_video.mp4
+```
+
+This will generate a CSV file with:
+- **Frame numbers** (0-indexed)
+- **17 COCO body keypoints** per frame (nose, eyes, ears, shoulders, elbows, wrists, hips, knees, ankles)
+- **X, Y coordinates and confidence scores** for each keypoint
+
+**Example output**: `your_video.csv` with columns like:
+```
+frame,nose_x,nose_y,nose_conf,left_eye_x,left_eye_y,left_eye_conf,...
+0,320.5,180.2,0.95,315.3,175.8,0.92,...
+1,321.1,181.0,0.94,316.0,176.5,0.91,...
+```
+
+**Advanced usage:**
+```bash
+# Custom output path
+python video_to_2d_keypoints.py input.mp4 --output keypoints.csv
+
+# Use CPU instead of GPU
+python video_to_2d_keypoints.py input.mp4 --device cpu
+
+# Custom model
+python video_to_2d_keypoints.py input.mp4 \
+    --config path/to/config.py \
+    --weights path/to/weights.pth
+```
+
+For detailed documentation, see [VIDEO_TO_CSV_README.md](VIDEO_TO_CSV_README.md).
+
+
 ## 📦 Pre-trained Models
 
 Pre-trained models are available on [VRG Hugging Face 🤗](https://huggingface.co/vrg-prague/ProbPose-s/):
