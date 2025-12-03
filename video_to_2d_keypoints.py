@@ -35,7 +35,8 @@ COCO_KEYPOINT_NAMES = [
 ]
 
 
-def extract_keypoints_from_video(video_path, output_csv, model_config, model_weights, device='cuda'):
+def extract_keypoints_from_video(video_path, output_csv, model_config, model_weights, 
+                                 det_model=None, det_weights=None, device='cuda'):
     """
     Extract 2D keypoints from a video and save to CSV.
     
@@ -44,6 +45,8 @@ def extract_keypoints_from_video(video_path, output_csv, model_config, model_wei
         output_csv: Path to output CSV file
         model_config: Path to model config file
         model_weights: Path to model weights file
+        det_model: Path to detector config file (optional)
+        det_weights: Path to detector weights file (optional)
         device: Device to use ('cuda' or 'cpu')
     """
     print(f"\n{'='*60}")
@@ -71,9 +74,16 @@ def extract_keypoints_from_video(video_path, output_csv, model_config, model_wei
     
     # Initialize the inferencer
     print("Initializing MMPoseInferencer...")
+    
+    # If detector model is not specified, use RTMDet as default
+    if det_model is None:
+        det_model = 'rtmdet-m'
+    
     inferencer = MMPoseInferencer(
         pose2d=model_config,
         pose2d_weights=model_weights,
+        det_model=det_model,
+        det_weights=det_weights,
         device=device,
         show_progress=True
     )
@@ -178,6 +188,18 @@ def main():
         choices=['cuda', 'cpu'],
         help='Device to use for inference'
     )
+    parser.add_argument(
+        '--det-model',
+        type=str,
+        default=None,
+        help='Detector model name or config path (default: rtmdet-m)'
+    )
+    parser.add_argument(
+        '--det-weights',
+        type=str,
+        default=None,
+        help='Path to detector weights file (optional)'
+    )
     
     args = parser.parse_args()
     
@@ -192,6 +214,8 @@ def main():
         output_csv=args.output,
         model_config=args.config,
         model_weights=args.weights,
+        det_model=args.det_model,
+        det_weights=args.det_weights,
         device=args.device
     )
 
