@@ -99,7 +99,7 @@ train_pipeline = [
     dict(type="RandomFlip", direction="horizontal"),
     dict(type="RandomHalfBody"),
     dict(type="RandomBBoxTransform"),
-    dict(type="RandomEdgesBlackout", input_padding=INPUT_PADDING, input_size=(192, 256)),
+    dict(type="RandomEdgesBlackout", context_size=INPUT_PADDING),
     dict(type="TopdownAffine", input_size=codec["input_size"], use_udp=True, input_padding=INPUT_PADDING),
     dict(type="GenerateTarget", encoder=codec),
     dict(type="PackPoseInputs"),
